@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭任务小帮手 - 三丽鸥主题</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --hello-kitty-pink: #FF9BB5;
+            --melody-blue: #B5D9FF;
+            --cinnamoroll-sky: #A7E6FF;
+            --kuromi-purple: #C8A2C8;
+            --pompompurin-yellow: #FFE4A7;
+            --my-melody-red: #FF6B6B;
+            --keroppi-green: #A3D977;
+            --background: #FFF9FB;
+        }
+
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: var(--background);
+            color: #5A5A5A;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(var(--hello-kitty-pink) 2px, transparent 2px),
+                radial-gradient(var(--melody-blue) 2px, transparent 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 155, 181, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                var(--hello-kitty-pink) 0%, 
+                var(--melody-blue) 25%, 
+                var(--cinnamoroll-sky) 50%, 
+                var(--kuromi-purple) 75%, 
+                var(--pompompurin-yellow) 100%);
+        }
+
+        .title {
+            font-size: 3.2rem;
+            color: var(--hello-kitty-pink);
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 var(--melody-blue);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: "♡";
+            color: var(--my-melody-red);
+            font-size: 2rem;
+            position: absolute;
+            top: -15px;
+            right: -30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--kuromi-purple);
+            margin-bottom: 20px;
+        }
+
+        .family-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid transparent;
+            text-align: center;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .member-card.zhoushiqiang {
+            border-color: var(--hello-kitty-pink);
+        }
+
+        .member-card.zhangzuping {
+            border-color: var(--melody-blue);
+        }
+
+        .member-card.zhouxueying {
+            border-color: var(--kuromi-purple);
+        }
+
+        .member-card.zhouyuting {
+            border-color: var(--pompompurin-yellow);
+        }
+
+        .member-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .zhoushiqiang .member-icon {
+            background-color: rgba(255, 155, 181, 0.2);
+            color: var(--hello-kitty-pink);
+        }
+
+        .zhangzuping .member-icon {
+            background-color: rgba(181, 217, 255, 0.2);
+            color: var(--melody-blue);
+        }
+
+        .zhouxueying .member-icon {
+            background-color: rgba(200, 162, 200, 0.2);
+            color: var(--kuromi-purple);
+        }
+
+        .zhouyuting .member-icon {
+            background-color: rgba(255, 228, 167, 0.2);
+            color: #E6B422;
+        }
+
+        .member-name {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .task-area {
+            min-height: 100px;
+            padding: 15px;
+            background-color: #F9F9F9;
+            border-radius: 15px;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .task-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .task-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+        }
+
+        .tasks-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .tasks-title {
+            font-size: 2rem;
+            color: var(--hello-kitty-pink);
+            margin-bottom: 25px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .task-item {
+            background: #F9F9F9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .task-item:hover {
+            transform: scale(1.05);
+        }
+
+        .task-item.cooking {
+            border-color: var(--my-melody-red);
+        }
+
+        .task-item.dishwashing {
+            border-color: var(--cinnamoroll-sky);
+        }
+
+        .task-item.sweeping {
+            border-color: var(--keroppi-green);
+        }
+
+        .task-item.other {
+            border-color: var(--pompompurin-yellow);
+        }
+
+        .task-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .task-item.cooking i {
+            color: var(--my-melody-red);
+        }
+
+        .task-item.dishwashing i {
+            color: var(--cinnamoroll-sky);
+        }
+
+        .task-item.sweeping i {
+            color: var(--keroppi-green);
+        }
+
+        .task-item.other i {
+            color: var(--pompompurin-yellow);
+        }
+
+        .task-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        .task-item p {
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .assign-btn {
+            background: linear-gradient(135deg, var(--hello-kitty-pink) 0%, var(--kuromi-purple) 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 155, 181, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .assign-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 155, 181, 0.4);
+        }
+
+        .assign-btn:active {
+            transform: translateY(0);
+        }
+
+        .assign-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--kuromi-purple) 0%, var(--hello-kitty-pink) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .assign-btn:hover::before {
+            opacity: 1;
+        }
+
+        .assign-btn i {
+            margin-right: 10px;
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .history-title {
+            font-size: 2rem;
+            color: var(--melody-blue);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .history-item {
+            background: #F9F9F9;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--hello-kitty-pink);
+        }
+
+        .history-item:nth-child(2n) {
+            border-left-color: var(--melody-blue);
+        }
+
+        .history-item:nth-child(3n) {
+            border-left-color: var(--kuromi-purple);
+        }
+
+        .history-item:nth-child(4n) {
+            border-left-color: var(--pompompurin-yellow);
+        }
+
+        .history-time {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 0.95rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .sanrio-characters {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .character {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .character i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .kitty {
+            color: var(--hello-kitty-pink);
+        }
+
+        .melody {
+            color: var(--melody-blue);
+        }
+
+        .cinnamoroll {
+            color: var(--cinnamoroll-sky);
+        }
+
+        .kuromi {
+            color: var(--kuromi-purple);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes taskAssigned {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .family-members {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            }
+            
+            .assign-btn {
+                padding: 18px 40px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .member-card {
+                padding: 20px;
+            }
+            
+            .assign-btn {
+                padding: 16px 30px;
+                font-size: 1.2rem;
+                width: 100%;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">家庭任务小帮手</h1>
+            <p class="subtitle">随机分配任务，让家务变得公平有趣！</p>
+            
+            <div class="sanrio-characters">
+                <div class="character">
+                    <i class="fas fa-cat kitty"></i>
+                    <span>Hello Kitty</span>
+                </div>
+                <div class="character">
+                    <i class="fas fa-heart melody"></i>
+                    <span>My Melody</span>
+                </div>
+                <div class="character">
+                    <i class="fas fa-dog cinnamoroll"></i>
+                    <span>Cinnamoroll</span>
+                </div>
+                <div class="character">
+                    <i class="fas fa-skull kuromi"></i>
+                    <span>Kuromi</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="family-members">
+            <div class="member-card zhoushiqiang">
+                <div class="member-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h2 class="member-name">周世强</h2>
+                <div class="task-area" id="task-zhoushiqiang">
+                    <div class="task-icon"></div>
+                    <div class="task-name">等待分配任务...</div>
+                </div>
+            </div>
+            
+            <div class="member-card zhangzuping">
+                <div class="member-icon">
+                    <i class="fas fa-user-female"></i>
+                </div>
+                <h2 class="member-name">张祖平</h2>
+                <div class="task-area" id="task-zhangzuping">
+                    <div class="task-icon"></div>
+                    <div class="task-name">等待分配任务...</div>
+                </div>
+            </div>
+            
+            <div class="member-card zhouxueying">
+                <div class="member-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 class="member-name">周雪莹</h2>
+                <div class="task-area" id="task-zhouxueying">
+                    <div class="task-icon"></div>
+                    <div class="task-name">等待分配任务...</div>
+                </div>
+            </div>
+            
+            <div class="member-card zhouyuting">
+                <div class="member-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="member-name">周雨婷</h2>
+                <div class="task-area" id="task-zhouyuting">
+                    <div class="task-icon"></div>
+                    <div class="task-name">等待分配任务...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tasks-section">
+            <h2 class="tasks-title">
+                <i class="fas fa-tasks"></i>
+                本周家务任务
+            </h2>
+            <div class="tasks-grid">
+                <div class="task-item cooking">
+                    <i class="fas fa-utensils"></i>
+                    <h3>做饭</h3>
+                    <p>准备美味的家庭餐食</p>
+                </div>
+                <div class="task-item dishwashing">
+                    <i class="fas fa-hand-sparkles"></i>
+                    <h3>洗碗</h3>
+                    <p>清洗餐具，保持厨房整洁</p>
+                </div>
+                <div class="task-item sweeping">
+                    <i class="fas fa-broom"></i>
+                    <h3>扫地</h3>
+                    <p>打扫地面，保持家中清洁</p>
+                </div>
+                <div class="task-item other">
+                    <i class="fas fa-list-check"></i>
+                    <h3>其他</h3>
+                    <p>临时任务或特别安排</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="assign-btn" id="assign-btn">
+                <i class="fas fa-random"></i>
+                随机分配任务
+            </button>
+        </div>
+        
+        <div class="history-section">
+            <h2 class="history-title">
+                <i class="fas fa-history"></i>
+                任务分配记录
+            </h2>
+            <div class="history-list" id="history-list">
+                <!-- 历史记录将在这里显示 -->
+                <div class="history-item">
+                    <span>还没有分配记录，点击上方按钮开始吧！</span>
+                    <span class="history-time"></span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 家庭任务分配系统 | 三丽鸥可爱主题 | 让家务变得更有趣！</p>
+            <p>设计理念：公平、随机、有趣的家庭任务分配</p>
+        </footer>
+    </div>
+
+    <script>
+        // 家庭成员
+        const familyMembers = [
+            { id: 'zhoushiqiang', name: '周世强' },
+            { id: 'zhangzuping', name: '张祖平' },
+            { id: 'zhouxueying', name: '周雪莹' },
+            { id: 'zhouyuting', name: '周雨婷' }
+        ];
+        
+        // 任务列表
+        const tasks = [
+            { id: 'cooking', name: '做饭', icon: 'fas fa-utensils', color: 'var(--my-melody-red)' },
+            { id: 'dishwashing', name: '洗碗', icon: 'fas fa-hand-sparkles', color: 'var(--cinnamoroll-sky)' },
+            { id: 'sweeping', name: '扫地', icon: 'fas fa-broom', color: 'var(--keroppi-green)' },
+            { id: 'other', name: '其他', icon: 'fas fa-list-check', color: 'var(--pompompurin-yellow)' }
+        ];
+        
+        // 分配历史
+        let assignmentHistory = [];
+        
+        // DOM元素
+        const assignBtn = document.getElementById('assign-btn');
+        const historyList = document.getElementById('history-list');
+        
+        // 随机分配任务函数
+        function assignTasks() {
+            // 复制任务数组并随机排序
+            const shuffledTasks = [...tasks].sort(() => Math.random() - 0.5);
+            
+            // 为每个家庭成员分配任务
+            familyMembers.forEach((member, index) => {
+                const task = shuffledTasks[index];
+                const taskArea = document.getElementById(`task-${member.id}`);
+                const taskIcon = taskArea.querySelector('.task-icon');
+                const taskName = taskArea.querySelector('.task-name');
+                
+                // 更新任务显示
+                taskIcon.innerHTML = `<i class="${task.icon}"></i>`;
+                taskIcon.style.display = 'block';
+                taskIcon.style.color = task.color;
+                taskName.textContent = task.name;
+                taskArea.style.backgroundColor = `${task.color}20`; // 添加透明度
+                
+                // 添加动画效果
+                taskArea.style.animation = 'taskAssigned 0.5s ease-out';
+                setTimeout(() => {
+                    taskArea.style.animation = '';
+                }, 500);
+            });
+            
+            // 记录分配历史
+            const assignmentTime = new Date();
+            const timeString = assignmentTime.toLocaleTimeString('zh-CN', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            const dateString = assignmentTime.toLocaleDateString('zh-CN', {
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const historyEntry = {
+                time: `${dateString} ${timeString}`,
+                assignments: familyMembers.map((member, index) => ({
+                    member: member.name,
+                    task: shuffledTasks[index].name
+                }))
+            };
+            
+            assignmentHistory.unshift(historyEntry);
+            
+            // 更新历史记录显示
+            updateHistoryDisplay();
+            
+            // 显示成功消息
+            showNotification('任务分配完成！');
+        }
+        
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            
+            if (assignmentHistory.length === 0) {
+                const emptyItem = document.createElement('div');
+                emptyItem.className = 'history-item';
+                emptyItem.innerHTML = `<span>还没有分配记录，点击上方按钮开始吧！</span><span class="history-time"></span>`;
+                historyList.appendChild(emptyItem);
+                return;
+            }
+            
+            assignmentHistory.forEach(entry => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                // 创建分配详情文本
+                let assignmentsText = '';
+                entry.assignments.forEach((assignment, index) => {
+                    assignmentsText += `${assignment.member} → ${assignment.task}`;
+                    if (index < entry.assignments.length - 1) {
+                        assignmentsText += ' | ';
+                    }
+                });
+                
+                historyItem.innerHTML = `
+                    <span>${assignmentsText}</span>
+                    <span class="history-time">${entry.time}</span>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--hello-kitty-pink) 0%, var(--kuromi-purple) 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: bold;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // 添加动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.innerHTML = `
+                <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后移除通知
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // 添加按钮点击事件
+        assignBtn.addEventListener('click', assignTasks);
+        
+        // 初始加载时更新历史记录显示
+        updateHistoryDisplay();
+        
+        // 添加键盘快捷键支持 (空格键或回车键)
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' || event.code === 'Enter') {
+                event.preventDefault();
+                assignTasks();
+            }
+        });
+    </script>
+</body>
+</html>
